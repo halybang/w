@@ -134,7 +134,11 @@ namespace wayward {
       std::chrono::time_point<std::chrono::system_clock> us_repr {std::chrono::microseconds(us)};
       auto from_epoch = std::chrono::system_clock::to_time_t(us_repr);
       struct tm t;
+#if __MINGW32__
+      ::gmtime_s(&t, &from_epoch);
+#else
       ::gmtime_r(&from_epoch, &t);
+#endif
       return t;
     }
 
@@ -144,7 +148,11 @@ namespace wayward {
       std::chrono::time_point<std::chrono::system_clock> us_repr {std::chrono::microseconds(us)};
       auto from_epoch = std::chrono::system_clock::to_time_t(us_repr);
       struct tm t;
+#if __MINGW32__
+      ::localtime_s(&t, &from_epoch);
+#else
       ::localtime_r(&from_epoch, &t);
+#endif
       return t;
     }
 

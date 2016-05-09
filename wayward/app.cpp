@@ -204,12 +204,14 @@ namespace wayward {
   };
 
   static void app_die_if_orphaned() {
+#ifndef _WIN32
     // If the parent process becomes 1, we have been orphaned.
     pid_t parent_pid = ::getppid();
     if (parent_pid == 1) {
       w::log::error("App server orphaned, exiting.");
       ::exit(1);
     }
+#endif
   }
 
   App::App(int argc, char const* const* argv) : priv(new Private) {
@@ -260,9 +262,11 @@ namespace wayward {
     std::string program_name = argv[0];
     auto last_sep = program_name.find_last_of('/');
     std::string path = last_sep == std::string::npos ? std::string(".") : program_name.substr(0, last_sep);
+#ifndef _WIN32
     char* real_path = ::realpath(path.c_str(), nullptr);
     priv->root = std::string(real_path);
     ::free(real_path);
+#endif
 
     cmd.option("--root", [&](const std::string& root) {
       priv->root = root;

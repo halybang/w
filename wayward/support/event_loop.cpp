@@ -106,7 +106,7 @@ namespace wayward {
     };
   }
 
-  std::unique_ptr<IEventHandle> EventLoop::add_file_descriptor(int fd, FDEvents events, FDEventCallback callback) {
+  std::unique_ptr<IEventHandle> EventLoop::add_file_descriptor(evutil_socket_t fd, FDEvents events, FDEventCallback callback) {
     evutil_make_socket_nonblocking(fd);
     auto handle = std::unique_ptr<FDEventHandle_libevent>(new FDEventHandle_libevent);
     event* ev = event_new(p_->base, fd, (short)events, FDEventHandle_libevent::handle_event_cb, handle.get());

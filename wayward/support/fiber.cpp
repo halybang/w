@@ -4,7 +4,9 @@
 #include <exception>
 #include <assert.h>
 #include <setjmp.h>
-#include <sys/mman.h>
+#ifndef _WIN32
+#    include <sys/mman.h>
+#endif
 
 namespace wayward {
   static const size_t FIBER_STACK_SIZE = 1024 * 1024; // Includes canary page.
@@ -81,6 +83,7 @@ namespace wayward {
     struct FiberStackAllocator {
       void* allocate_stack() {
         if (free_list == nullptr) {
+#ifndef _WIN32
           void* stack = ::mmap(nullptr, FIBER_STACK_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 
           // Mark the 'farthest' (first or last, depending on stack direction) with forbidden access,
@@ -93,6 +96,9 @@ namespace wayward {
           }
           assert((((intptr_t)canary) % CANARY_PAGE_SIZE) == 0); // Canary page is not on a page bound.
           ::mprotect(canary, CANARY_PAGE_SIZE, PROT_NONE);
+#else
+            void* stack = malloc(FIBER_STACK_SIZE);
+#endif
           return stack;
         } else {
           void* next_in_line = *free_list_location(free_list);
@@ -112,7 +118,11 @@ namespace wayward {
         void* ptr = free_list;
         while (ptr) {
           void* next_in_line = *((void**)free_list);
+#ifndef _WIN32
           ::munmap(ptr, FIBER_STACK_SIZE);
+#else
+          free(ptr);
+#endif
           ptr = next_in_line;
         }
       }

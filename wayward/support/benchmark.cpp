@@ -1,6 +1,8 @@
 #include "wayward/support/benchmark.hpp"
 
+#ifndef _WIN32
 #include <sys/resource.h>
+#endif
 
 namespace wayward {
   DateTime PerformanceClock::now() const {

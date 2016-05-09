@@ -9,6 +9,9 @@
 #define UNW_LOCAL_ONLY 1
 #include <libunwind.h>
 #include <cxxabi.h>
+#elif defined(__MINGW32__)
+#include <unwind.h>
+#include <cxxabi.h>
 #endif
 
 namespace wayward {

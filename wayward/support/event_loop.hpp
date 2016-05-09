@@ -6,6 +6,8 @@
 
 #include <wayward/support/datetime.hpp>
 
+#include <event2/event.h>
+
 namespace wayward {
   using FDEvents = uint64_t;
 
@@ -31,7 +33,7 @@ namespace wayward {
     virtual void* native_handle() const = 0;
 
     virtual std::unique_ptr<IEventHandle>
-    add_file_descriptor(int fd, FDEvents events, FDEventCallback callback) = 0;
+    add_file_descriptor(evutil_socket_t fd, FDEvents events, FDEventCallback callback) = 0;
 
     virtual std::unique_ptr<IEventHandle>
     call_in(DateTimeInterval interval, std::function<void()> callback, bool repeat = false) = 0;
@@ -48,7 +50,7 @@ namespace wayward {
     void* native_handle() const;
 
     std::unique_ptr<IEventHandle>
-    add_file_descriptor(int fd, FDEvents events, FDEventCallback callback) final;
+    add_file_descriptor(evutil_socket_t fd, FDEvents events, FDEventCallback callback) final;
 
     std::unique_ptr<IEventHandle>
     call_in(DateTimeInterval interval, std::function<void()> callback, bool repeat = false) final;
