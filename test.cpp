@@ -1,7 +1,11 @@
 #include <w>
-#include <p>
 #include <iostream>
 
+#define TEST_PERSISTENCE 0
+
+#if TEST_PERSISTENCE
+
+#include <p>
 using p::PrimaryKey;
 using p::BelongsTo;
 using p::HasMany;
@@ -20,7 +24,7 @@ PERSISTENCE(User) {
   property(&User::id, "id");
   property(&User::email, "email");
   property(&User::crypted_password, "crypted_password");
-  has_many(&User::articles, "author_id");
+  //has_many(&User::articles, "author_id");
 }
 
 struct Article {
@@ -39,10 +43,12 @@ PERSISTENCE(Article) {
   property(&Article::created_at, "created_at");
 }
 
+#endif
 int main (int argc, char const *argv[])
 {
-  w::App app;
+  w::App app(argc, argv);
 
+#if TEST_PERSISTENCE
   p::Configuration config = {
     .connection_string = "postgresql://wayward_test@localhost/wayward_test",
     .pool_size = 5,
@@ -57,9 +63,6 @@ int main (int argc, char const *argv[])
     return 1;
   }
 
-  app.get("/", [](w::Request& req) -> w::Response {
-    return w::render_text("Hello, World!");
-  });
 
   app.get("/articles/:id", [](w::Request& req) -> w::Response {
     std::stringstream ss;
@@ -75,6 +78,11 @@ int main (int argc, char const *argv[])
     // return w::render_template("article", req);
     // return w::render_template("article", {{"id", 2}, {"title", "Hejsa"}});
   });
+  namespace pr = p::relational_algebra;
+#endif
+  app.get("/", [](w::Request& req) -> w::Response {
+    return w::render_text("Hello, World!");
+  });
 
   app.get("/articles/redirect", [](w::Request& req) -> w::Response {
     return w::redirect("/");
@@ -89,7 +97,7 @@ int main (int argc, char const *argv[])
 
   // }
 
-  namespace pr = p::relational_algebra;
+
 
   // auto query = pr::projection("articles")
   //   .where(
@@ -134,6 +142,7 @@ int main (int argc, char const *argv[])
 
   app.print_routes();
 
-  return app.listen_and_serve("0.0.0.0", 3000);
+  return app.run();
+  //return app.listen_and_serve("0.0.0.0", 3000);
   //return 0;
 }
