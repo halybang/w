@@ -97,9 +97,13 @@ def WaywardEnvironment(base):
     env.Replace(CXX = 'clang++')
     env.Replace(CC  = 'clang')
     env.Append(CCFLAGS = '-fcolor-diagnostics')
-    env.Append(CXXFLAGS = Split('-std=c++1y -stdlib=libc++'))
+    # Fix bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808086
+    # Ref: http://stackoverflow.com/questions/37096062/get-a-basic-c-program-to-compile-using-clang-on-ubuntu-16
+    #env.Append(CXXFLAGS = Split('-std=c++1y -stdlib=libc++'))
+    env.Append(CXXFLAGS = Split('-std=c++1y -stdlib=libstdc++'))
     env.Append(SHCCFLAGS = Split('-fPIC'))
-    env.Append(LINKFLAGS = Split("-pthread -stdlib=libc++"))
+    #env.Append(LINKFLAGS = Split("-pthread -stdlib=libc++"))
+    env.Append(LINKFLAGS = Split("-pthread -stdlib=libstdc++"))
     env.Append(SHLINKFLAGS = Split("$LINKFLAGS -fvisibility=default -fPIC -soname '${TARGET.file}'"))
     mode_flags["release"]["ccflags"]     = Split("-O3 -g -flto")
     mode_flags["release"]["linkflags"]   = Split("-flto")

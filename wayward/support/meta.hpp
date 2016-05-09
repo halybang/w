@@ -4,6 +4,7 @@
 
 #include <type_traits>
 #include <memory>
+#include <limits>
 
 namespace wayward {
   namespace meta {
