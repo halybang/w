@@ -11,7 +11,7 @@ bin_prefix = '$PREFIX/bin'
 inc_prefix = '$PREFIX/include'
 
 libevent_cflags = os.popen('pkg-config --cflags libevent libevent_pthreads').read().strip()
-libevent_libs   = os.popen('pkg-config --libs libevent libevent_pthreads').read().strip()
+libevent_libs   = os.popen('pkg-config --libs libevent libevent_pthreads libevent_openssl').read().strip()
 libpq_cflags    = os.popen('pkg-config --cflags libpq').read().strip()
 libpq_libs      = os.popen('pkg-config --libs libpq').read().strip()
 
@@ -52,7 +52,7 @@ def WaywardInternalProgram(environment, target_name, source, rpaths = []):
     # them as part of LINKFLAGS. This is because the GNU linker discards a library after having encountered it and
     # resolved any currently pending symbols.
     libs = copy.copy(_wayward_default_libs)
-    libs.extend(['event', 'event_pthreads', 'pq', 'unwind'])
+    libs.extend(['evhtp', 'event', 'event_pthreads', 'event_openssl' , 'crypto', 'ssl', 'pq', 'unwind'])
     env.Append(LIBS = libs)
   env.Append(LINKFLAGS = linkflags)
   return env.Program(target = target_name, source = source)

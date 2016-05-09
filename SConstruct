@@ -25,8 +25,8 @@ wayward_support_sources = Split("""
   wayward/support/string.cpp
   wayward/support/types.cpp
   3rdparty/libevhtp/evhtp.c
-  3rdparty/libevhtp/htparse/htparse.c
-  3rdparty/libevhtp/evthr/evthr.c
+  3rdparty/libevhtp/htparse.c
+  3rdparty/libevhtp/evthr.c
   """)
 
 wayward_support_headers = Split("""
