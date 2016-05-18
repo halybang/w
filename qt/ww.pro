@@ -2,6 +2,7 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
+
 CONFIG += c++1y
 QMAKE_CXXFLAGS += -std=c++1y
 QMAKE_LFLAGS +=  -std=c++1y
@@ -25,7 +26,8 @@ win32 {
     }
 }else:macx{
 }else:unix{
-    LIBS  += -lz -lpthread -ldl -lunwind
+    LIBS  += -lz -lpthread -ldl -lunwind -lpq
+    INCLUDEPATH += /usr/include/postgresql
 }
 
 include(deployment.pri)
@@ -36,6 +38,21 @@ include (wayward.pri)
 
 #SOURCES += main.cpp
 
-SOURCES += ../test.cpp
+OTHER_FILES += ../examples/blog/models.hpp
 
-message("INCLUDE: $$INCLUDEPATH")
+#SOURCES += ../test.cpp
+#OTHER_FILES += ../examples/blog/blog.cpp
+
+SOURCES += ../examples/blog/blog.cpp
+OTHER_FILES += ../test.cpp
+
+OTHER_FILES += ../SConstruct
+OTHER_FILES += ../wayward_build.py
+OTHER_FILES += ../CMakeLists.txt
+OTHER_FILES += ../w_util/CMakeLists.txt
+OTHER_FILES += ../examples/blog/CMakeLists.txt
+
+INCLUDEPATH=$$unique(INCLUDEPATH)
+QMAKE_CFLAGS=$$unique(QMAKE_CFLAGS)
+QMAKE_CXXFLAGS=$$unique(QMAKE_CXXFLAGS)
+QMAKE_LFLAGS=$$unique(QMAKE_LFLAGS)

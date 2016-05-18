@@ -74,4 +74,11 @@ SOURCES += $$PERISTENCE_DIR/primary_key.cpp
 SOURCES += $$PERISTENCE_DIR/projection.cpp
 SOURCES += $$PERISTENCE_DIR/property.cpp
 SOURCES += $$PERISTENCE_DIR/relational_algebra.cpp
-#SOURCES += $$PERISTENCE_DIR/p.cpp
+SOURCES += $$PERISTENCE_DIR/p.cpp
+
+HEADERS += $$PERISTENCE_DIR/adapters/postgresql/renderers.hpp
+HEADERS += $$PERISTENCE_DIR/adapters/postgresql/connection.hpp
+SOURCES += $$PERISTENCE_DIR/adapters/postgresql/connection.cpp
+SOURCES += $$PERISTENCE_DIR/adapters/postgresql/renderers.cpp
+
+OTHER_FILES += $$PERISTENCE_DIR/CMakeLists.txt

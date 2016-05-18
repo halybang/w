@@ -101,5 +101,5 @@ SOURCES += $$WAYWARD_DIR/log.cpp
 SOURCES += $$WAYWARD_DIR/render.cpp
 SOURCES += $$WAYWARD_DIR/respond_to.cpp
 SOURCES += $$WAYWARD_DIR/template_engine.cpp
-
+OTHER_FILES += $$WAYWARD_DIR/CMakeLists.txt
 

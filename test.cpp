@@ -1,17 +1,19 @@
-#include <w>
 #include <iostream>
+#include <w>
 
-#define TEST_PERSISTENCE 0
+//#include "../examples/blog/models.hpp"
+#define TEST_PERSISTENCE 1
 
 #if TEST_PERSISTENCE
 
 #include <p>
+using w::Maybe;
 using p::PrimaryKey;
 using p::BelongsTo;
 using p::HasMany;
-using w::Maybe;
 
 struct Article;
+struct User;
 
 struct User {
   PrimaryKey id;
@@ -20,20 +22,25 @@ struct User {
   HasMany<Article> articles;
 };
 
-PERSISTENCE(User) {
-  property(&User::id, "id");
-  property(&User::email, "email");
-  property(&User::crypted_password, "crypted_password");
-  //has_many(&User::articles, "author_id");
-}
 
+
+#if 1
 struct Article {
   PrimaryKey id;
-  std::uint64_t created_at; // UNIX timestamp for now...
+  //std::uint64_t created_at; // UNIX timestamp for now...
+  //std::uint64_t created_at; // UNIX timestamp for now...
+  std::int64_t created_at; // UNIX timestamp for now...
   std::string title;
   BelongsTo<User> author;
   Maybe<std::string> some_text;
 };
+
+PERSISTENCE(User) {
+  property(&User::id, "id");
+  property(&User::email, "email");
+  property(&User::crypted_password, "crypted_password");
+  has_many(&User::articles, "articles", "author_id");
+}
 
 PERSISTENCE(Article) {
   property(&Article::id, "id");
@@ -42,13 +49,14 @@ PERSISTENCE(Article) {
   property(&Article::some_text, "some_text");
   property(&Article::created_at, "created_at");
 }
-
+#endif
 #endif
 int main (int argc, char const *argv[])
 {
   w::App app(argc, argv);
 
-#if TEST_PERSISTENCE
+#if TEST_PERSISTENCE & 0
+#if 0
   p::Configuration config = {
     .connection_string = "postgresql://wayward_test@localhost/wayward_test",
     .pool_size = 5,
@@ -62,7 +70,11 @@ int main (int argc, char const *argv[])
     std::cout << w::format("Connection failed: {0}\n", connection_error);
     return 1;
   }
-
+#else
+  std::string connection_string = "postgresql://wayward_test@localhost/wayward_test";
+  p::setup("master_db",connection_string);
+  p::DataStore& ds = p::data_store("master_db");
+#endif
 
   app.get("/articles/:id", [](w::Request& req) -> w::Response {
     std::stringstream ss;

@@ -94,12 +94,12 @@ namespace wayward {
   public:
     constexpr Maybe() : ptr_{nullptr} {}
     Maybe(T value) : ptr_(std::move(value)) {}
-    Maybe(Maybe<T>&& other) = default;
-    Maybe(const Maybe<T>& other) = default;
+    Maybe(Maybe<T>&& other) : ptr_(std::move(other.ptr_)) { other.ptr_ = nullptr; }
+    Maybe(const Maybe<T>& other) : ptr_( other.ptr_) {}
     constexpr Maybe(NothingType) : ptr_{nullptr} {}
     ~Maybe() {}
-    Maybe<T>& operator=(const Maybe<T>& value) = default;
-    Maybe<T>& operator=(Maybe<T>&& value) = default;
+    Maybe<T>& operator=(const Maybe<T>& value) { ptr_ = value.ptr_; return *this; }
+    Maybe<T>& operator=(Maybe<T>&& value) { ptr_ = value.ptr_; value.ptr_ = nullptr; return *this; }
 
     T* get() { if (ptr_) return &ptr_; throw EmptyMaybeDereference(); }
     const T* get() const { if (ptr_) return &ptr_; throw EmptyMaybeDereference(); }
