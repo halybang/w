@@ -81,4 +81,10 @@ HEADERS += $$PERISTENCE_DIR/adapters/postgresql/connection.hpp
 SOURCES += $$PERISTENCE_DIR/adapters/postgresql/connection.cpp
 SOURCES += $$PERISTENCE_DIR/adapters/postgresql/renderers.cpp
 
+HEADERS += $$PERISTENCE_DIR/adapters/mysql/mysql_renderers.hpp
+HEADERS += $$PERISTENCE_DIR/adapters/mysql/mysql_connection.hpp
+SOURCES += $$PERISTENCE_DIR/adapters/mysql/mysql_connection.cpp
+SOURCES += $$PERISTENCE_DIR/adapters/mysql/mysql_renderers.cpp
+
 OTHER_FILES += $$PERISTENCE_DIR/CMakeLists.txt
+

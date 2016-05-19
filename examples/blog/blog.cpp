@@ -22,6 +22,7 @@ namespace app {
         .reverse_order();
 
       return w::render("index.html", {{"posts", posts}});
+      return w::render_json(posts);
     }
   };
 
@@ -108,10 +109,12 @@ namespace app {
 
 int main(int argc, char const *argv[])
 {
-  p::setup("postgresql://wayward_examples@localhost/wayward_examples_blog");
+  //p::setup("postgresql://wayward_examples@localhost/wayward_examples_blog");
+  //^([\w]+)\:\/\/(([^:@]*)(\:([^@]+))?@)?([^/:?#]+)(\:(\d+))?(\/([^?#]+))?(\?([^#]*))?(\#(.*))?$
+  p::setup("mysql://wayward:password@localhost/wayward_examples_blog");
 
-  w::load_plugin("wayward_synth.plugin");
-  w::set_template_engine("synth", {{"template_path", "views"}});
+  //w::load_plugin("wayward_synth.plugin");
+  //w::set_template_engine("synth", {{"template_path", "views"}});
 
   w::App app { argc, argv };
 

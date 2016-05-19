@@ -26,7 +26,7 @@ win32 {
     }
 }else:macx{
 }else:unix{
-    LIBS  += -lz -lpthread -ldl -lunwind -lpq
+    LIBS  += -lz -lpthread -ldl -lunwind -lpq -lmysqlclient
     INCLUDEPATH += /usr/include/postgresql
 }
 
